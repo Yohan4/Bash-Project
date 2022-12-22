@@ -15,3 +15,20 @@ height 900 \
 }
 
 
+function
+{
+# $? = was last command succesfull . Answer is 0 means 'yes'. Answer is 1 means 'No'
+while true
+do
+   DATE=$(zenity --calendar --title="SELECT DATE" --text="select a date to add an event" --ok-label="Add event" --width=500 --height=500        --cancel-label="Cancel" --date-format='%m-%d-%y')
+
+   if  [ $? -eq 1 ] 
+   then
+        break
+   else
+   ADD_EVENT=$(zenity --entry --text="Add an event" --width=600 --height=200)
+   fi
+done
+}
+
+
