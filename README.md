@@ -2,6 +2,7 @@
 # CST 1500
 
 #!/bin/bash
+
 function Date
 {
 zenity --info \
