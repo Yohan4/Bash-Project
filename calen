@@ -46,7 +46,7 @@ done
 
 function exitf
 {
-choice=(zenity --list --text="SELECT AN OPTION " --title="MENU" --column="TITLE" \
+choice=(zenity --list --text="SELECT AN OPTION " --title="MENU" --column="" --column="TITLE" \
  "DATE AND TIME" \
  "CALENDAR" \
  "DELETE FILE" \
@@ -54,7 +54,36 @@ choice=(zenity --list --text="SELECT AN OPTION " --title="MENU" --column="TITLE"
 
 }
 
-exitf
+
+
+
+
+#part2
+#!/bin/bash
+OS_Type(){
+zenity --info \
+       --title "OS TYPE" \
+       --width=200 \
+       --text "$(cat /etc/os-release)"
+}
+
+
+CPU_information(){
+zenity --info \
+       --title "COMPUTER CPU INFORMATION" \
+       --width=500 \
+       --text "$(lscpu)"      
+}
+
+
+choice=(zenity --list --title="SELECT AN OPTION " --column=""--column="TITLE" \
+ "Your operating system type" \
+ "Computer cpu information" \
+ "Memory information" \
+ "Hard disk information" \
+ "Mounted file system" \
+ --cancel-label="EXIT" --ok-label="select" --width=500 --height=200 --radiolist) #Displays a list dialog with choices to chose from
+
 
 
 
