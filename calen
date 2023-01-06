@@ -5,7 +5,7 @@ zenity --info \
 --text="TIME: $(date "+%T")
 DATE: $(date "+%d-%B-%Y")" \
 width 900 \
-height 900\  #displays a text dialog for the time and date
+height 900\  #displays an info dialog box for the time and date in a fomatted way
 }
 
 function reminder
@@ -18,13 +18,13 @@ do
     --height=200 \
     --ok-label="ADD NEW EVENT" \
     --cancel-label="CANCEL" \
-   --filename="$The.txt"   # Displays text information dialog
+   --filename="$The.txt"   # Displays text information dialog 
    
    if [ $? -eq 1 ] #check if cancel label has been selected
    then
        break #if true exits the loop
    else
-       ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --title="NEW EVENT" --width=500 --height=200) #displays a text entry dialog and use input is sab=ved in variable ADD_EVENT
+       ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --title="NEW EVENT" --width=500 --height=200) #displays a text entry dialog  and use input is sab=ved in variable ADD_EVENT
        echo "$ADD_EVENT">>"$The.txt" #user input is appended in a file
    fi
 done   
@@ -69,25 +69,25 @@ choice=(zenity --list --text="SELECT AN OPTION " --title="MENU" --column="" --co
 
 #part2
 #!/bin/bash
-OS_Type(){
-zenity --info \
+OS_Type(){                                      #Creating function for The operating system type
+zenity --info \                                 #The operating system information is displayed using the info dialog box
        --title "OS TYPE" \
        --width=200 \
-       --text "$(cat /etc/os-release)"
+       --text "$(cat /etc/os-release)"          #By running the command cat /etc/os-release we can check the operating system
 }
 
 
-CPU_information(){
-zenity --info \
+CPU_information(){                              #Creating function for Computer cpu information
+zenity --info \                                 #Computer cpu information is displayed using the info dialog box
        --title "COMPUTER CPU INFORMATION" \
        --width=500 \
-       --text "$(lscpu)"      
+       --text "$(lscpu)"                        #By running the command lscpu it diaplys the cpu details
 }
 
 
-Memory_info{
-echo "$(cat /proc/meminfo)" > "memory_info.txt"
-zenity --text-info \
+Memory_info(){                                  #Creating function for Memory Information
+echo "$(cat /proc/meminfo)" > "memory_info.txt" #The command cat /proc/meminfo reports the amount of available and used memory. The file "memory_info.txt" is created  and store the command information in the file.
+zenity --text-info \                            #Memory information is displayed using the text dialog box
 --title "MEMORY INFORMATION" \
 --filename "memory_info.txt"
 }
