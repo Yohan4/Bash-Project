@@ -1,4 +1,13 @@
 #!/bin/bash
+DATE_TIME(){
+zenity --info \
+--title "Date and Time" \
+--text="TIME: $(date "+%T")
+DATE: $(date "+%d-%B-%Y")" \
+width 900 \
+height 900\  #displays a text dialog for the time and date
+}
+
 function reminder
 {
 while true
