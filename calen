@@ -1,108 +1,140 @@
 #!/bin/bash
-DATE_TIME(){
-zenity --info \
---title "Date and Time" \
---text="TIME: $(date "+%T")
-DATE: $(date "+%d-%B-%Y")" \
-width 900 \
-height 900\  #displays an info dialog box for the time and date in a fomatted way
+
+main() {
+    utility_selector
 }
 
-function reminder
-{
-while true
-do
-   zenity --text-info \
-    --title="REMINDER" \
-    --width=200 \
-    --height=200 \
-    --ok-label="ADD NEW EVENT" \
-    --cancel-label="CANCEL" \
-   --filename="$The.txt"   # Displays text information dialog 
-   
-   if [ $? -eq 1 ] #check if cancel label has been selected
-   then
-       break #if true exits the loop
-   else
-       ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --title="NEW EVENT" --width=500 --height=200) #displays a text entry dialog  and use input is sab=ved in variable ADD_EVENT
-       echo "$ADD_EVENT">>"$The.txt" #user input is appended in a file
-   fi
-done   
+utility_selector() {
+    selected_utility=$(
+        zenity --list \
+                --title="Utility Selector" \
+                --radiolist \
+                --column="" --column="Utilities" \
+                False "Date/Time" \
+                False "Calendar" \
+                False "Delete" \
+                False "Operating System Type" \
+                False "Computer CPU Informaiton" \
+                False "Memory Information" \
+                False "Hard Disk Information" \
+                False "Mounted File System" \
+                --cancel-label="Exit" \
+                --ok-label="Open"
+    )
+
+    case $selected_utility in
+    "Date/Time")
+        echo -n "Date/Time"
+        ;;
+    "Calendar")
+        echo -n "Calendar"
+        ;;
+    "Delete")
+        delete_file
+        ;;
+    "Operating System Type")
+        os_type
+        ;;
+    "Computer CPU Informaiton")
+        cpu_information
+        ;;
+    "Memory Information")
+        memory_info
+        ;;
+    "Hard Disk Information")
+        hdd_info
+        ;;
+    "Mounted File System")
+        file_system_type
+        ;;
+    *)
+        echo -n "None Selected"
+        ;;
+    esac
 }
 
-function calendar
-{
-while true
-do
-    Date=$(zenity --calendar --text="select a date to add an event" --ok-label "Add event" --cancel-label "cancel" --width=400 --height=100 --title="SELECT A DATE" --date-format='%d.%m.%Y' ) # Displays the calendar dialog box and store the date chosen in variable $Date
-   
-   if [ $? -eq 0 ] #$? = was last command succesfull . Answer is 0 means 'yes'. Non-zero values means 'No'
-   then 
-        FILENAME="$Date.txt" #The file is assigned to variable FILENAME
-        if [ -f "$FILENAME" ] # check if the file exists
-        then
-            reminder "$Date" #if true reminder is called and performs what is in the function reminder
-        else
-            ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --width=500 --height=200) # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
-        fi
-   else
-        break #exits the loop if cancel button is chosen
-   fi
-   echo "$ADD_EVENT">>"$FILENAME" #The user input is stored in the file FILENAME="Calendar.txt"
-   reminder "$Date"
-done
+delete_file() {
+    FILE=$(zenity --file-selection --title="Select a File")
+
+    case $? in
+    0)
+        echo "\"$FILE\" selected."
+        # TODO
+        # Prompt User: Confirm File Deletion
+        # Action: Delete File
+        # Ouput: Success Message
+        ;;
+    1)
+        echo "No file selected."
+        ;;
+    -1)
+        echo "An unexpected error has occurred."
+        ;;
+    esac
 }
 
-function exitf
-{
-choice=(zenity --list --text="SELECT AN OPTION " --title="MENU" --column="" --column="TITLE" \
- "DATE AND TIME" \
- "CALENDAR" \
- "DELETE FILE" \
- --cancel-label="EXIT" --ok-label="select" --width=500 --height=200 --radiolist) #Displays a list dialog with choices to chose from
+os_type() {
+    os_information=$(cat /etc/os-release)
 
+    zenity --text-info \
+        --title="Operating System Type" \
+        --ok-label="Go Back" <<<$os_information
+
+    case $? in
+    0)
+        main
+        ;;
+    esac
 }
 
+cpu_information() {
+    cpu_specification=$(lscpu)
 
+    zenity --text-info \
+        --title="Computer CPU Information" \
+        --ok-label="Go Back" <<<$cpu_specification
 
-
-
-#part2
-#!/bin/bash
-OS_Type(){                                      #Creating function for The operating system type
-zenity --info \                                 #The operating system information is displayed using the info dialog box
-       --title "OS TYPE" \
-       --width=200 \
-       --text "$(cat /etc/os-release)"          #By running the command cat /etc/os-release we can check the operating system
+    case $? in
+    0)
+        main
+        ;;
+    esac
 }
 
+memory_info() {
+    memory_data=$(cat /proc/meminfo)
 
-CPU_information(){                              #Creating function for Computer cpu information
-zenity --info \                                 #Computer cpu information is displayed using the info dialog box
-       --title "COMPUTER CPU INFORMATION" \
-       --width=500 \
-       --text "$(lscpu)"                        #By running the command lscpu it diaplys the cpu details
+    zenity --text-info \
+        --title="Memory Information" \
+        --ok-label="Go Back" <<<$memory_data
+
+    case $? in
+    0)
+        main
+        ;;
+    esac
 }
 
+# hdd_info() {
+#     # TODO
+#     # Find a replacement which doesn't require sudo,
+#     # or prompt user to enter password to use the following sudo command
+#     # sudo hdparm -I /dev/sda
+# }
 
-Memory_info(){                                  #Creating function for Memory Information
-echo "$(cat /proc/meminfo)" > "memory_info.txt" #The command cat /proc/meminfo reports the amount of available and used memory. The file "memory_info.txt" is created  and store the command information in the file.
-zenity --text-info \                            #Memory information is displayed using the text dialog box
---title "MEMORY INFORMATION" \
---filename "memory_info.txt"
+file_system_type() {
+    mount_list=$(mount | grep "^/dev")
+
+    zenity --text-info \
+        --title="Mounted File System" \
+        --ok-label="Go Back" <<<$mount_list
+
+    case $? in
+    0)
+        main
+        ;;
+    esac
 }
 
-
-choice=(zenity --list --title="SELECT AN OPTION " --column=""--column="TITLE" \
- "Your operating system type" \
- "Computer cpu information" \
- "Memory information" \
- "Hard disk information" \
- "Mounted file system" \
- --cancel-label="EXIT" --ok-label="select" --width=500 --height=200 --radiolist) #Displays a list dialog with choices to chose from
-
-
-
-
-
-
+# call main function and pass all command line parameters using "$@" as a list
+main "$@"
