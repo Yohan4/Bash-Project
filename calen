@@ -49,6 +49,7 @@ utility_selector() {
         ;;
     *)
         echo -n "None Selected"
+        break
         ;;
     esac
 }
