@@ -36,32 +36,23 @@ while true
 do
     Date=$(zenity --calendar --text="select a date to add an event" --ok-label "Add event" --cancel-label "cancel" --width=400 --height=100 --title="SELECT A DATE" --date-format='%d.%m.%Y' ) # Displays the calendar dialog box and store the date chosen in variable $Date
    
-   if [ $? -eq 0 ] #$? = was last command succesfull . Answer is 0 means 'yes'. Non-zero values means 'No'
+   if [ $? -eq 1 ] #$? = was last command succesfull . Answer is 0 means 'yes ok-label has been selected'. Non-zero values means 'No cancel-label has been selected'
    then 
-        FILENAME="$Date.txt" #The file is assigned to variable FILENAME
-        if [ -f "$FILENAME" ] # check if the file exists
-        then
-            reminder "$Date" #if true reminder is called and performs what is in the function reminder
-        else
-            ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --width=500 --height=200) # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
-        fi
+      break
+   fi       
+   FILENAME="$Date.txt" #The file is assigned to variable FILENAME
+   if [ -f "$FILENAME" ] # check if the file exists
+   then
+       reminder "$Date" #if true reminder is called and performs what is in the function reminder
    else
-        break #exits the loop if cancel button is chosen
+       ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --width=500 --height=200) # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
+       echo "$ADD_EVENT">>"$FILENAME" #The user input is stored in the file FILENAME="Calendar.txt"
+       reminder "$Date"
    fi
-   echo "$ADD_EVENT">>"$FILENAME" #The user input is stored in the file FILENAME="Calendar.txt"
-   reminder "$Date"
 done
 }
 
-function exitf
-{
-choice=(zenity --list --text="SELECT AN OPTION " --title="MENU" --column="" --column="TITLE" \
- "DATE AND TIME" \
- "CALENDAR" \
- "DELETE FILE" \
- --cancel-label="EXIT" --ok-label="select" --width=500 --height=200 --radiolist) #Displays a list dialog with choices to chose from
 
-}
 
 
 
