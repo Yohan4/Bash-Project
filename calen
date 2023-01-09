@@ -136,5 +136,14 @@ file_system_type() {
     esac
 }
 
+hard_disk_info() {
+echo "$(cat/proc/scsi/scsi)" > "hardisk.txt"
+echo "$(lshw -class storage -class disk)" >> "hardisk.txt"
+zenity --text-info \
+   --width=800 \
+   --height=800 \
+   --title "Hard Drive"
+}
+
 # call main function and pass all command line parameters using "$@" as a list
 main "$@"
