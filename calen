@@ -129,7 +129,7 @@ delete_file() {
 os_type() {
     os_information=$(cat /etc/os-release)
 
-    zenity --text-info \
+    zenity --info \
         --title="Operating System Type" \
         --ok-label="Go Back" <<<$os_information
 
@@ -143,7 +143,7 @@ os_type() {
 cpu_information() {
     cpu_specification=$(lscpu)
 
-    zenity --text-info \
+    zenity --info \
         --title="Computer CPU Information" \
         --ok-label="Go Back" <<<$cpu_specification
 
