@@ -228,15 +228,14 @@ zenity --text-info \                            #Memory information is displayed
 }
 
 
-choice=(zenity --list --title="SELECT AN OPTION " --column=""--column="TITLE" \
- "Your operating system type" \
- "Computer cpu information" \
- "Memory information" \
- "Hard disk information" \
- "Mounted file system" \
- --cancel-label="EXIT" --ok-label="select" --width=500 --height=200 --radiolist) #Displays a list dialog with choices to chose from
-
-
+hdd_info() {
+echo "$(cat /proc/scsi/scsi)" > "hardisk.txt"
+echo "$(lshw -class storage -class disk)" >> "hardisk.txt"
+zenity --text-info \
+   --width=800 \
+   --height=800 \
+   --title "Hard Drive"
+}
 
 
 
