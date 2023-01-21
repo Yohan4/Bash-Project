@@ -14,7 +14,7 @@ do
    then
        break #if true exits the loop
    else
-       ADD_EVENT=$(zenity --entry --title="ADD an event"--text="Add an event on $Date" --title="NEW EVENT" --width=400 --height=200) #displays a text entry dialog  and user input is saved in variable ADD_EVENT
+       ADD_EVENT=$(zenity --entry --title="ADD an event"--text="Add an event on $Date" --title="NEW EVENT" --width=500 --height=300) #displays a text entry dialog  and user input is saved in variable ADD_EVENT
        echo "$ADD_EVENT">>"$1.txt" #user input is appended in a file
    fi
 done   
@@ -31,12 +31,12 @@ do
       break
    fi       
    FILENAME="$Date.txt" #The file is assigned to variable FILENAME
-   if [ -f "$FILENAME" ] # check if the file exists
+   if [ -f "$FILENAME" ] # check if the file with thay specific date exists
    then
-       reminder "$Date" #if true reminder is called and performs what is in the function reminder
+       reminder "$Date" #if true reminder of that specific date is called and performs what is in the function reminder 
    else
        ADD_EVENT=$(zenity --entry --title="ADD AN EVENT" --text="Add an event on $Date" --width=500 --height=300) # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
-       echo "$ADD_EVENT">>"$FILENAME" #The user input is stored in the file FILENAME="Calendar.txt"
+       echo "$ADD_EVENT">>"$FILENAME" #The user input is stored in the file FILENAME="Date.txt" which is a specific date
        reminder "$Date"
    fi
 done
