@@ -1,5 +1,58 @@
 #!/bin/bash
-Date/Time(){
+main() {
+    utility_selector
+}
+
+utility_selector() {
+    selected_utility=$(
+        zenity --list \
+                --title="Utility Selector" \
+                --radiolist \
+                --column="" --column="Utilities" \
+                False "Date/Time" \
+                False "Calendar" \
+                False "Delete" \
+                False "Operating System Type" \
+                False "Computer CPU Informaiton" \
+                False "Memory Information" \
+                False "Hard Disk Information" \
+                False "Mounted File System" \
+                --cancel-label="Exit" \
+                --ok-label="Open"
+    )
+    
+     case $selected_utility in
+    "Date/Time")
+        Date_Time   
+        ;;
+    "Calendar")
+        calendar
+        ;;
+    "Delete")
+        delete_file
+        ;;
+    "Operating System Type")
+        os_type
+        ;;
+    "Computer CPU Informaiton")
+        cpu_information
+        ;;
+    "Memory Information")
+        memory_info
+        ;;
+    "Hard Disk Information")
+        hdd_info
+        ;;
+    "Mounted File System")
+        file_system_type
+        ;;
+    *)
+        echo -n "None Selected"
+        ;;
+    esac
+}
+
+Date_Time(){
 zenity --info \
 --title "Date and Time" \
 --text="TIME: $(date "+%T")
@@ -8,49 +61,140 @@ width 900 \
 height 900\  #displays an info dialog box for the time and date in a fomatted way
 }
 
-function reminder
-{
+reminder(){
 while true
 do
    zenity --text-info \
     --title="REMINDER" \
-    --width=200 \
-    --height=200 \
+    --width=500 \
+    --height=400 \
     --ok-label="ADD NEW EVENT" \
-    --cancel-label="CANCEL" \
-   --filename="$The.txt"   # Displays text information dialog 
+    --cancel-label="Go Back" \
+   --filename="$1.txt"   # Displays text information dialog 
    
    if [ $? -eq 1 ] #check if cancel label has been selected
    then
        break #if true exits the loop
    else
-       ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --title="NEW EVENT" --width=500 --height=200) #displays a text entry dialog  and use input is sab=ved in variable ADD_EVENT
-       echo "$ADD_EVENT">>"$The.txt" #user input is appended in a file
+       ADD_EVENT=$(zenity --entry --title="ADD an event"--text="Add an event on $Date" --title="NEW EVENT" --width=500 --height=300) #displays a text entry dialog  and user input is saved in variable ADD_EVENT
+       echo "$ADD_EVENT">>"$1.txt" #user input is appended in a file
    fi
 done   
 }
 
-function Calendar
-{
+
+calendar(){
 while true
 do
-    Date=$(zenity --calendar --text="select a date to add an event" --ok-label "Add event" --cancel-label "cancel" --width=400 --height=100 --title="SELECT A DATE" --date-format='%d.%m.%Y' ) # Displays the calendar dialog box and store the date chosen in variable $Date
+    Date=$(zenity --calendar --text="select a date to add an event" --ok-label "Add event" --cancel-label "cancel" --width=600 --height=400 --title="SELECT A DATE" --date-format='%d.%m.%Y' ) # Displays the calendar dialog box and store the date chosen in variable $Date
    
    if [ $? -eq 1 ] #$? = was last command succesfull . Answer is 0 means 'yes ok-label has been selected'. Non-zero values means 'No cancel-label has been selected'
    then 
       break
    fi       
    FILENAME="$Date.txt" #The file is assigned to variable FILENAME
-   if [ -f "$FILENAME" ] # check if the file exists
+   if [ -f "$FILENAME" ] # check if the file with thay specific date exists
    then
-       reminder "$Date" #if true reminder is called and performs what is in the function reminder
+       reminder "$Date" #if true reminder of that specific date is called and performs what is in the function reminder 
    else
-       ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --width=500 --height=200) # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
-       echo "$ADD_EVENT">>"$FILENAME" #The user input is stored in the file FILENAME="Calendar.txt"
+       ADD_EVENT=$(zenity --entry --title="ADD AN EVENT" --text="Add an event on $Date" --width=500 --height=300) # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
+       echo "$ADD_EVENT">>"$FILENAME" #The user input is stored in the file FILENAME="Date.txt" which is a specific date
        reminder "$Date"
    fi
 done
 }
+
+
+
+delete_file() {
+    FILE=$(zenity --file-selection --title="Select a File")
+
+    case $? in
+    0)
+        echo "\"$FILE\" selected."
+        # TODO
+        # Prompt User: Confirm File Deletion
+        # Action: Delete File
+        # Ouput: Success Message
+        ;;
+    1)
+        echo "No file selected."
+        ;;
+    -1)
+        echo "An unexpected error has occurred."
+        ;;
+    esac
+}
+
+os_type() {
+    os_information=$(cat /etc/os-release)
+
+    zenity --text-info \
+        --title="Operating System Type" \
+        --ok-label="Go Back" <<<$os_information
+
+    case $? in
+    0)
+        main
+        ;;
+    esac
+}
+
+cpu_information() {
+    cpu_specification=$(lscpu)
+
+    zenity --text-info \
+        --title="Computer CPU Information" \
+        --ok-label="Go Back" <<<$cpu_specification
+
+    case $? in
+    0)
+        main
+        ;;
+    esac
+}
+
+memory_info() {
+    memory_data=$(cat /proc/meminfo)
+
+    zenity --text-info \
+        --title="Memory Information" \
+        --ok-label="Go Back" <<<$memory_data
+
+    case $? in
+    0)
+        main
+        ;;
+    esac
+}
+
+# hdd_info() {
+#     # TODO
+#     # Find a replacement which doesn't require sudo,
+#     # or prompt user to enter password to use the following sudo command
+#     # sudo hdparm -I /dev/sda
+# }
+
+
+
+file_system_type() {
+    mount_list=$(mount | grep "^/dev")
+
+    zenity --text-info \
+        --title="Mounted File System" \
+        --ok-label="Go Back" <<<$mount_list
+
+    case $? in
+    0)
+        main
+        ;;
+    esac
+ }
+    # call main function and pass all command line parameters using "$@" as a list
+main "$@"
+
+
+
 
 
 
