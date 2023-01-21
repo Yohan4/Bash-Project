@@ -55,60 +55,6 @@ utility_selector() {
 }
 
 
-Date/Time(){
-zenity --info \
---title "Date and Time" \
---text="TIME: $(date "+%T")
-DATE: $(date "+%d-%B-%Y")" \
-width 900 \
-height 900\  #displays an info dialog box for the time and date in a fomatted way
-}
-
-
-reminder(){
-while true
-do
-   zenity --text-info \
-    --title="REMINDER" \
-    --width=200 \
-    --height=200 \
-    --ok-label="ADD NEW EVENT" \
-    --cancel-label="CANCEL" \
-   --filename="$The.txt"   # Displays text information dialog 
-   
-   if [ $? -eq 1 ] #check if cancel label has been selected
-   then
-       break #if true exits the loop
-   else
-       ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --title="NEW EVENT" --width=500 --height=200) #displays a text entry dialog  and use input is sab=ved in variable ADD_EVENT
-       echo "$ADD_EVENT">>"$The.txt" #user input is appended in a file
-   fi
-done   
-}
-
-
-Calendar(){
-while true
-do
-    Date=$(zenity --calendar --text="select a date to add an event" --ok-label "Add event" --cancel-label "cancel" --width=400 --height=100 --title="SELECT A DATE" --date-format='%d.%m.%Y' ) # Displays the calendar dialog box and store the date chosen in variable $Date
-   
-   if [ $? -eq 1 ] #$? = was last command succesfull . Answer is 0 means 'yes ok-label has been selected'. Non-zero values means 'No cancel-label has been selected'
-   then 
-      break
-   fi       
-   FILENAME="$Date.txt" #The file is assigned to variable FILENAME
-   if [ -f "$FILENAME" ] # check if the file exists
-   then
-       reminder "$Date" #if true reminder is called and performs what is in the function reminder
-   else
-       ADD_EVENT=$(zenity --entry --text="Add an event on $Date" --width=500 --height=200) # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
-       echo "$ADD_EVENT">>"$FILENAME" #The user input is stored in the file FILENAME="Calendar.txt"
-       reminder "$Date"
-   fi
-done
-}
-
-
 delete_file() {
     FILE=$(zenity --file-selection --title="Select a File")
 
@@ -198,14 +144,6 @@ file_system_type() {
     esac
 }
 
-hdd_info() {
-echo "$(cat/proc/scsi/scsi)" > "hardisk.txt"
-echo "$(lshw -class storage -class disk)" >> "hardisk.txt"
-zenity --text-info \
-   --width=800 \
-   --height=800 \
-   --title "Hard Drive"
-}
 
 # call main function and pass all command line parameters using "$@" as a list
 main "$@"
