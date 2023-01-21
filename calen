@@ -53,21 +53,20 @@ utility_selector() {
         ;;
     esac
 }
-
+# displays an info dialog box for the time and date in a fomatted way
 Date_Time(){
 zenity --info \
 --title "Date and Time" \
 --text="TIME: $(date "+%T")
 DATE: $(date "+%d-%B-%Y")" \
-width=300 \
-height=300   #displays an info dialog box for the time and date in a fomatted way
-
+                                    
 case $? in
     0)
         main
         ;;
     esac
 }
+
 
 reminder(){
 while true
