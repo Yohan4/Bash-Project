@@ -58,9 +58,10 @@ date_time() {
 
 calendar() {
     while true
-            # Displays the calendar dialog box and store the date chosen in variable $Date
-            Date=$(zenity --calendar --text="select a date to add an event" --ok-label "Add event" --cancel-label "cancel" --width=500 --height=300 --title="SELECT A DATE" --date-format='%d.%m.%Y' )
-        do
+    do
+        # Displays the calendar dialog box and store the date chosen in variable $Date
+        Date=$(zenity --calendar --text="select a date to add an event" --ok-label "Add event" --cancel-label "cancel" --width=500 --height=300 --title="SELECT A DATE" --date-format='%d.%m.%Y' )
+        
         
         #$? = was last command succesfull . Answer is 0 means 'yes ok-label has been selected'. Non-zero values means 'No cancel-label has been selected'
         if [ $? -eq 1 ] ; then 
@@ -73,16 +74,16 @@ calendar() {
             #if true reminder of that specific date is called and performs what is in the function reminder 
             Reminder "$Date" 
         else
-            # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
+            # if false it displays an entry box and  the user input is stored in variable ADD_EVENT
             ADD_EVENT=$(zenity --entry --title="ADD AN EVENT" --text="Add an event on $Date" --width=500 --height=300)
             #The user input is stored in the file NAME="Date.txt" which is a specific date
             echo "$ADD_EVENT">>"$NAME" 
-            reminder "$Date"
+            Reminder "$Date"
         fi
     done
 }
 
-reminder() {
+Reminder() {
     while true
         do
         zenity --text-info \
@@ -187,54 +188,6 @@ delete_file() {
 main "$@"
 
 
-
-Reminder(){
-while true
-do
-  zenity --text-info \
-    --title="REMINDER for $Date" \
-    --width=500 \
-    --height=400 \
-    --ok-label="Add New Event" \
-    --cancel-label="Go Back" \
-   --filename="$1.txt"   # Displays text information dialog 
-   
-   
-   if [ $? -eq 1 ] #check if cancel label has been selected
-   then
-       break #if true exits the loop
-       
-   else
-       ADD_EVENT=$(zenity --entry --title="NEW EVENT" --text="Add a new event on $Date" --cancel-label="Go Back" --width=500 --height=300) #displays a text entry dialog  and user input is saved in variable ADD_EVENT
-       echo "$ADD_EVENT">>"$1.txt" #user input is appended in a file
-   fi
-done   
-}
-
-
-Calendar(){
-while true
-do
-    Date=$(zenity --calendar --text="select a date to add an event" --ok-label "Add event" --cancel-label "cancel" --width=500 --height=300 --title="SELECT A DATE" --date-format='%d.%m.%Y' ) # Displays the calendar dialog box and store the date chosen in variable $Date
-   
-   if [ $? -eq 1 ] #$? = was last command succesfull . Answer is 0 means 'yes ok-label has been selected'. Non-zero values means 'No cancel-label has been selected'
-   then 
-      break
-     
-   fi       
-   NAME="$Date.txt" #The file is assigned to variable NAME
-   if [ -f "$NAME" ] # check if the file with thay specific date exists
-   then
-       Reminder "$Date" #if true reminder of that specific date is called and performs what is in the function reminder 
-   else
-       ADD_EVENT=$(zenity --entry --title="ADD AN EVENT" --text="Add an event on $Date" --width=500 --height=300) # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
-       echo "$ADD_EVENT">>"$NAME" #The user input is stored in the file NAME="Date.txt" which is a specific date
-       Reminder "$Date"
-   fi
-done
-}
-
-
 delete_menu() {
     directory_input=$(
         zenity --entry \
@@ -310,13 +263,16 @@ main "$@"
 
 
 
-os_type() {
-    os_information=$(cat /etc/os-release)
-
-    zenity --info \
+os_type() { 
+    # The command cat /etc/os-release which enables us to check the operating system is stored in  variable os_information
+    os_information=$(cat /etc/os-release)  
+    
+    # The operating system information is displayed using the info dialog box
+    zenity --info \                      
         --title="Operating System Type" \
         --ok-label="Go Back" <<<$os_information
-
+   
+   # returns back to main menu when ok-label is selected
     case $? in
     0)
         main
@@ -325,8 +281,10 @@ os_type() {
 }
 
 cpu_information() {
+    #The command lscpu which displays the cpu details is stored in variable cpu_specification
     cpu_specification=$(lscpu)
-
+    
+    #Computer cpu information is displayed using the info dialog box
     zenity --info \
         --title="Computer CPU Information" \
         --ok-label="Go Back" <<<$cpu_specification
@@ -339,8 +297,10 @@ cpu_information() {
 }
 
 memory_info() {
+    #The command cat /proc/meminfo reports the amount of available and used memory and is stored in variable memory_data
     memory_data=$(cat /proc/meminfo)
-
+    
+    #Memory information is displayed using the text dialog box
     zenity --text-info \
         --title="Memory Information" \
         --ok-label="Go Back" <<<$memory_data
@@ -381,45 +341,6 @@ main "$@"
 
 
 
-
-
-
-
-
-#part2
-#!/bin/bash
-OS_Type(){                                      #Creating function for The operating system type
-zenity --info \                                 #The operating system information is displayed using the info dialog box
-       --title "OS TYPE" \
-       --width=200 \
-       --text "$(cat /etc/os-release)"          #By running the command cat /etc/os-release we can check the operating system
-}
-
-
-CPU_information(){                              #Creating function for Computer cpu information
-zenity --info \                                 #Computer cpu information is displayed using the info dialog box
-       --title "COMPUTER CPU INFORMATION" \
-       --width=500 \
-       --text "$(lscpu)"                        #By running the command lscpu it diaplys the cpu details
-}
-
-
-Memory_info(){                                  #Creating function for Memory Information
-echo "$(cat /proc/meminfo)" > "memory_info.txt" #The command cat /proc/meminfo reports the amount of available and used memory. The file "memory_info.txt" is created  and store the command information in the file.
-zenity --text-info \                            #Memory information is displayed using the text dialog box
---title "MEMORY INFORMATION" \
---filename "memory_info.txt"
-}
-
-
-hdd_info() {
-echo "$(cat /proc/scsi/scsi)" > "hardisk.txt"
-echo "$(lshw -class storage -class disk)" >> "hardisk.txt"
-zenity --text-info \
-   --width=800 \
-   --height=800 \
-   --title "Hard Drive"
-}
 
 
 
