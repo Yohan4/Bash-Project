@@ -33,11 +33,40 @@ utility_selector() {
     esac
 }
 
-date_time(){
-    zenity --info \
-            --title="Date and Time" \
-            --text="TIME: $(date "+%T") DATE: $(date "+%d-%B-%Y")"
-}
+
+(
+
+while true
+
+do
+
+	echo "0" ; sleep 1
+
+	echo "# $(date "+%T") DATE: $(date "+%d-%B-%Y")" ; sleep 1
+
+	echo "100" ; sleep 1
+
+done
+
+) |
+
+zenity --progress \
+
+  --title="Update System Logs" \
+
+  --text="Date/Time" \
+
+  --percentage=0
+
+
+
+if [ "$?" = -1 ] ; then
+
+        zenity --error \
+
+          --text="Update canceled."
+
+fi
 
 
 Reminder(){
