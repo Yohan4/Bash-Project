@@ -14,6 +14,11 @@ utility_selector() {
                 False "Date/Time" \
                 False "Calendar" \
                 False "Delete" \
+                False "Operating System Type" \
+                False "Computer CPU Informaiton" \
+                False "Memory Information" \
+                False "Hard Disk Information" \
+                False "File System (Mounted)" \
                 --cancel-label="Exit" \
                 --ok-label="Open"
     )
@@ -29,6 +34,21 @@ utility_selector() {
             ;;
         "Delete")
             delete_menu
+            ;;
+        "Operating System Type")
+            os_type
+            ;;
+        "Computer CPU Informaiton")
+            cpu_information
+            ;;
+        "Memory Information")
+            memory_info
+            ;;
+        "Hard Disk Information")
+            hdd_info
+            ;;
+        "File System (Mounted)")
+            file_system_type
             ;;
         *)
             zenity --warning \
