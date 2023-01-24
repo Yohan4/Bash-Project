@@ -84,12 +84,12 @@ calendar() {
             ADD_EVENT=$(zenity --entry --title="ADD AN EVENT" --text="Add an event on $Date" --width=500 --height=300)
             #The user input is stored in the file NAME="Date.txt" which is a specific date
             echo "$ADD_EVENT" >>"$NAME"
-            reminder "$Date"
+            Reminder "$Date"
         fi
     done
 }
 
-reminder() {
+Reminder() {
     while true; do
         zenity --text-info \
             --title="REMINDER for $Date" \
