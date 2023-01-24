@@ -34,17 +34,17 @@ utility_selector() {
 }
 
 
+#!/bin/sh
+
 (
 
 while true
 
 do
 
-	echo "0" ; sleep 1
+	echo "# Time: $(date "+%T")  |  DATE: $(date "+%d-%B-%Y")" ;
 
-	echo "# $(date "+%T") DATE: $(date "+%d-%B-%Y")" ; sleep 1
-
-	echo "100" ; sleep 1
+	echo "100" ;
 
 done
 
@@ -52,7 +52,7 @@ done
 
 zenity --progress \
 
-  --title="Update System Logs" \
+  --title="Clock" \
 
   --text="Date/Time" \
 
@@ -67,6 +67,7 @@ if [ "$?" = -1 ] ; then
           --text="Update canceled."
 
 fi
+
 
 
 Reminder(){
