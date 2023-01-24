@@ -17,42 +17,50 @@ utility_selector() {
                 --ok-label="Open"
     )
 
-    case $selected_utility in
-    "Date/Time")
-        date_time
+     case $? in
+    0)
+        case $selected_utility in
+        "Date/Time")
+            date_time
+            ;;
+        "Calendar")
+            calendar
+            ;;
+        "Delete")
+            delete_menu
+            ;;
+        *)
+            zenity --warning \
+                --text="Please select an item to continue!"
+            main
+            ;;
+        esac
         ;;
-    "Calendar")
-        calendar
-        ;;
-    "Delete")
-        delete_menu
-        ;;
-    *)
-        echo -n "None Selected" # TODO : Prompt user to select an item : return to menu
+    1)
+        exit
         ;;
     esac
 }
 
 date_time() {
     (
-        while true
-            do
-            echo "# Time: $(date "+%T")  |  DATE: $(date "+%d-%B-%Y")" ;
-            echo "100" ;
+        while true; do
+            echo "# Time: $(date "+%T")  |  DATE: $(date "+%d-%B-%Y")"
+            echo "100"
         done
     ) |
-    zenity --progress \
+        zenity --progress \
             --title="Clock" \
             --text="Date/Time" \
             --percentage=0
 
     case $? in
-        0)
-            main
-            ;;
-        1)
-            main
-            ;;
+    0)
+        main
+        ;;
+    1)
+        main
+        ;;
     esac
 }
 
