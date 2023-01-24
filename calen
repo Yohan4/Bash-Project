@@ -7,8 +7,8 @@ utility_selector() {
     selected_utility=$(
         zenity --list \
                 --title="Utility Selector" \
-                --width=400
-                --height=500
+                --width=400 \
+                --height=500 \
                 --radiolist \
                 --column="" --column="Utilities" \
                 False "Date/Time" \
