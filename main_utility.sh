@@ -132,7 +132,7 @@ date_time() {
     1)
         main # go back to main menu
         ;;
-    esac # CASE STATEMENT EMD
+    esac # CASE STATEMENT END
 }
 
 #### FUNCTION BEGIN
@@ -282,7 +282,6 @@ delete_menu() {
         # else use the provided directory name from user input
         if [ "$directory_input" = "" ]; then # if statement to check condition wether user input is empty
             
-            
             # call function file_selector and parse argument '$pwd' - current directory to the function
             # store returned values in file_to_delete
             # return file path or false for error
@@ -380,6 +379,7 @@ delete_file() {
     
     # get the currently directory, from which the program was launched and sets it to initial_directory variable
     initial_directory=$pwd 
+    
     # strips the location path to the file from the full_path and set it to variable file_location
     file_location="${full_path%/*}/" # '%/*' takes all values before last character '/'
     
