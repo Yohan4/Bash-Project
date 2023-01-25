@@ -25,12 +25,12 @@ Project Files: (main_utility.sh, sub_utility.sh)
 
 ## Main Utility
 #### Step 1: 
-       sudo chmod u+x main_utility.sh
+    sudo chmod u+x main_utility.sh
 #### Step 2: 
-       ./main_utility.sh
+    ./main_utility.sh
 
 ## Sub Utility
 #### Step 1: 
-       sudo chmod u+x sub_utility.sh
+    sudo chmod u+x sub_utility.sh
 #### Step 2: 
-       ./sub_utility.sh
+    ./sub_utility.sh
