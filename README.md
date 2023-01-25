@@ -107,27 +107,36 @@ calendar() {
 
 }
 
+#### FUNCTION BEGIN
+# Starts reminder procedure
+# ARGUMENTS: 
+# 	Date
+# OUTPUT: 
+# 	Go back to calendar
+#   Add even to a text file to the current directory
+#### FUNCTION END
 reminder() {
-    while true; do
-        zenity --text-info \
-            --title="REMINDER for $Date" \
-            --width=500 \
-            --height=400 \
-            --ok-label="Add New Event" \
-            --cancel-label="Go Back" \
-            --filename="$1.txt" # Displays text information dialog
+    date=$1 # set functions argument to a date variable
 
-        #check if cancel label has been selected
-        if [ $? -eq 1 ]; then
-            #if true exits the loop
-            calendar
-        else
-            #displays a text entry dialog  and user input is saved in variable ADD_EVENT
-            ADD_EVENT=$(zenity --entry --title="NEW EVENT" --text="Add a new event on $Date" --cancel-label="Go Back" --width=500 --height=300)
-            #user input is appended in a file
-            echo "$ADD_EVENT" >>"$1.txt"
-        fi
-    done
+    zenity --text-info \
+        --title="REMINDER for $Date" \
+        --width=500 \
+        --height=400 \
+        --ok-label="Add Reminder" \
+        --cancel-label="Go Back" \
+        --filename="$date.txt" # Displays text information dialog
+
+    #check if cancel label has been selected
+    if [ $? -eq 1 ]; then
+        #if true exits the loop
+        calendar
+    else
+        #displays a text entry dialog  and user input is saved in variable ADD_EVENT
+        ADD_EVENT=$(zenity --entry --title="NEW EVENT" --text="Add a new event on $Date" --cancel-label="Go Back" --width=500 --height=300)
+        #user input is appended in a file
+        echo "$ADD_EVENT" >>"$1.txt"
+        reminder $date # go back to reminder list
+    fi
 }
 
 #### FUNCTION BEGIN
