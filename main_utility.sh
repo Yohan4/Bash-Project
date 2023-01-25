@@ -50,8 +50,8 @@ utility_selector() {
     selected_utility=$(
         zenity --list \
             --title="Utility Selector" \
-            --width=400 \
-            --height=200 \
+            --width="400" \
+            --height="200" \
             --radiolist \
             --column="" --column="Utilities" \
             False "Date/Time" \
@@ -141,8 +141,8 @@ calendar() {
             --date-format='%d.%m.%Y' \
             --cancel-label="Go Back" \
             --ok-label="Open Reminder" \
-            --width=500 \
-            --height=300 
+            --width="500" \
+            --height="300" 
     )
 
     #$? = was last command succesfull . Answer is 0 means 'yes ok-label has been selected'. Non-zero values means 'No cancel-label has been selected'
@@ -161,8 +161,8 @@ calendar() {
         ADD_EVENT=$(zenity --entry \
                            --title="ADD AN EVENT" \
                            --text="Add an event on $Date" \
-                           --width=500 \
-                           --height=300)
+                           --width="500" \
+                           --height="400")
         #The user input is stored in the file NAME="Date.txt" which is a specific date
         echo "$ADD_EVENT" >>"$NAME"
         reminder "$Date"
@@ -184,8 +184,8 @@ reminder() {
     # generate a dialog which displays reminder panel and current reminders
     zenity --text-info \
         --title="$Date | Reminders" \
-        --width=500 \
-        --height=400 \
+        --width="500" \
+        --height="400" \
         --ok-label="Add Reminder" \
         --cancel-label="Go Back" \
         --filename="$date.txt" # open file if it exists else display a blank page
@@ -200,8 +200,8 @@ reminder() {
                 --title="New Reminder" \
                 --text="Add a new reminder for: $Date" \
                 --cancel-label="Go Back" \
-                --width=500 \
-                --height=300
+                --width="500" \
+                --height="300"
         )
 
         # checks if the returned value is empty and user haven't input a reminder
