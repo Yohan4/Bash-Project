@@ -46,6 +46,7 @@ main() {
 utility_selector() {
     # A list dialog box with all utilities to be selected from will be displayed and is stored in variable selected_utility
     # The radiolist enables us to use radio buttons for the first column
+    # For extention add 'False "More Utilities"' in the zenity list
     selected_utility=$(
         zenity --list \
             --title="Utility Selector" \
@@ -56,7 +57,6 @@ utility_selector() {
             False "Date/Time" \
             False "Calendar" \
             False "Delete" \
-            # False "More Utilities" \
             --cancel-label="Exit" \
             --ok-label="Open"
     )
@@ -104,7 +104,7 @@ date_time() {
     (
         # keeps updating Date and Time until the the process is terminated
         while true; do
-            # output time and date to feed to progree dialog
+            # output time and date to feed to progress dialog
             echo "# Time: $(date "+%T")  |  DATE: $(date "+%d-%B-%Y")"
             # percentage set to progress dialog, to allow termination of process
             echo "100"
@@ -133,14 +133,14 @@ date_time() {
 # starts the calendar procedure and display calendar menu
 #### FUNCTION END
 calendar() {
-    # Displays the calendar dialog box and store the date chosen in variable $Date
+    # Displays the calendar dialog box of zenity and store the date chosen in variable $Date
     Date=$(
         zenity --calendar \
             --title="Calendar/Reminder" \
             --text="Select a date to add a reminder" \
             --date-format='%d.%m.%Y' \
-            --cancel-label "Go Back" \
-            --ok-label "Open Reminder" \
+            --cancel-label="Go Back" \
+            --ok-label="Open Reminder" \
             --width=500 \
             --height=300 
     )
