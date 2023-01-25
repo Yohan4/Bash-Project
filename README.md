@@ -123,7 +123,7 @@ reminder() {
     date=$1 # set functions argument to a date variable
 
     zenity --text-info \
-        --title="REMINDER for $Date" \
+        --title="$Date | Reminders" \
         --width=500 \
         --height=400 \
         --ok-label="Add Reminder" \
@@ -136,12 +136,17 @@ reminder() {
         calendar
     else
         #displays a text entry dialog  and user input is saved in variable ADD_EVENT
-        ADD_EVENT=$(zenity --entry --title="NEW EVENT" --text="Add a new event on $Date" --cancel-label="Go Back" --width=500 --height=300)
-        
+        ADD_EVENT=$(zenity --entry \
+                           --title="New Reminder" \
+                           --text="Add a new reminder for: $Date" \
+                           --cancel-label="Go Back" \
+                           --width=500 \
+                           --height=300)
+
         if [ "$ADD_EVENT" = "" ] ; then
             # generate a warning prompt to notify user about the error
             zenity --warning \
-                --text="Please enter a reminder!"
+                --text="No reminder has been added!"
 
             reminder $date # go back to reminder list
         
@@ -182,19 +187,27 @@ delete_menu() {
             # return file path or false for error
             file_to_delete=$(file_selector $pwd)
 
-            
-            if [ "$file_to_delete" != false ]; then
+            # check if a file was returned to delete
+            # else go back to main menu
+            if [ "$file_to_delete" != false ]; then # if statement to check condition if their was an error thrown
+                # call delete function and parse the complete file path, 
+                # including filename and suffix to delete as an argument
                 delete_file $file_to_delete
             else
-                main
+                main # go back to main menu
             fi
 
         else # if user input is not empty
+            # call function file_selector and parse argument '$HOME\/$directory_input' - home directory + user selected directory
+            # store returned values in file_to_delete
+            # return file path or false for error
             file_to_delete=$(file_selector $HOME\/$directory_input)
-            if [ "$file_to_delete" != false ]; then
+            if [ "$file_to_delete" != false ]; then # if statement to check condition if their was an error thrown
+                # call delete function and parse the complete file path, 
+                # including filename and suffix to delete as an argument
                 delete_file $file_to_delete
             else
-                main
+                main # go back to main menu
             fi
         fi
         ;;
