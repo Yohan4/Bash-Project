@@ -19,3 +19,18 @@
     - Student No: M00851538
 
 Project Files: (main_utility.sh, sub_utility.sh)
+
+# How to run?
+> make sure to be in the directory where the files are located
+
+## Main Utility
+#### Step 1: 
+       sudo chmod u+x main_utility.sh ('Enter your password')
+#### Step 2: 
+       ./main_utility.sh
+
+## Sub Utility
+#### Step 1: 
+       sudo chmod u+x sub_utility.sh ('Enter your password')
+#### Step 2: 
+       ./sub_utility.sh
