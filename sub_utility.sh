@@ -101,13 +101,10 @@ os_type() {
     os_information=$(cat /etc/os-release)  
     
     # The operating system information is displayed using the info dialog box of zenity
-    zenity --info \                      
-        --title="Operating System Type" \
-        --width="400" \
-        --height="600" \
-        # zenity reads the contents from stdin 
-        # <<<stdin- allows zenity to read the content of the variable os_information from stdin
-        --ok-label="Go Back" <<<$os_information
+    # zenity reads the contents from stdin 
+    # <<<stdin- allows zenity to read the content of the variable os_information from stdin
+    zenity --text-info \
+        --title="Operating System" <<<$os_information
    
    # returns back to main menu when ok-label is selected
     case $? in
@@ -122,12 +119,10 @@ cpu_information() {
     cpu_specification=$(lscpu)
     
     #Computer cpu information is displayed using the info dialog box of zenity
-    zenity --info \
+    # zenity reads the contents from stdin 
+    # <<<stdin- allows zenity to read the content of the variable cpu_information from stdin
+    zenity --text-info \
         --title="Computer CPU Information" \
-        --width="400" \
-        --height="600" \
-        # zenity reads the contents from stdin 
-        # <<<stdin- allows zenity to read the content of the variable cpu_information from stdin
         --ok-label="Go Back" <<<$cpu_specification
 
     # returns back to main menu when ok-label is selected
@@ -143,11 +138,11 @@ memory_info() {
     memory_data=$(cat /proc/meminfo)
     
     #Memory information is displayed using the text dialog box of zenity
+    # <<<($data) , allows zenity to read the content of the variable memory_data from stdin
     zenity --text-info \
         --title="Memory Information" \
         --width="400" \
         --height="600" \
-        # <<<($data) , allows zenity to read the content of the variable memory_data from stdin
         --ok-label="Go Back" <<<$memory_data
 
     # returns back to main menu when ok-label is selected
@@ -196,10 +191,10 @@ hdd_info() {
         fi
         ;;
     1) 
-        # returns back to main menu 
+        
         main
         ;;
-    *)  # default operator returns an error message
+    *)  
         echo "An unexpected error has occurred."
         ;;
     esac
@@ -213,13 +208,13 @@ file_system_type() {
     # The command is then stored in variable mount_list
     mount_list=$(mount | grep "^/dev")
     
+    # <<<stdin- allows zenity to read the content of the variable mount_list from stdin
     zenity --text-info \
         --title="Mounted File System" \
         --width="400" \
         --height="600" \
-        # <<<stdin- allows zenity to read the content of the variable mount_list from stdin
         --ok-label="Go Back" <<<$mount_list
-    # returns back to main menu when ok-label is selected
+    
     case $? in
     *)
         main
