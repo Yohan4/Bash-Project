@@ -103,8 +103,8 @@ os_type() {
     # The operating system information is displayed using the info dialog box of zenity
     zenity --info \                      
         --title="Operating System Type" \
-        --width=400 \
-        --height=600 \
+        --width="400" \
+        --height="600" \
         # zenity reads the contents from stdin 
         # <<<stdin- allows zenity to read the content of the variable os_information from stdin
         --ok-label="Go Back" <<<$os_information
@@ -124,8 +124,8 @@ cpu_information() {
     #Computer cpu information is displayed using the info dialog box of zenity
     zenity --info \
         --title="Computer CPU Information" \
-        --width=400 \
-        --height=600 \
+        --width="400" \
+        --height="600" \
         # zenity reads the contents from stdin 
         # <<<stdin- allows zenity to read the content of the variable cpu_information from stdin
         --ok-label="Go Back" <<<$cpu_specification
@@ -145,8 +145,8 @@ memory_info() {
     #Memory information is displayed using the text dialog box of zenity
     zenity --text-info \
         --title="Memory Information" \
-        --width=400 \
-        --height=600 \
+        --width="400" \
+        --height="600" \
         # <<<($data) , allows zenity to read the content of the variable memory_data from stdin
         --ok-label="Go Back" <<<$memory_data
 
@@ -183,9 +183,8 @@ hdd_info() {
             else
                 # generates a window with hard disk information
                 zenity --text-info \
-                --width=400 \
-                --height=600 \
-                # <<<stdin- allows zenity to read the content of the variable DATA from stdin
+                --width="400" \
+                --height="600" \
                 --title "Hard Drive" <<<$DATA
 
                 case $? in
@@ -216,13 +215,13 @@ file_system_type() {
     
     zenity --text-info \
         --title="Mounted File System" \
-        --width=400 \
-        --height=600 \
+        --width="400" \
+        --height="600" \
         # <<<stdin- allows zenity to read the content of the variable mount_list from stdin
         --ok-label="Go Back" <<<$mount_list
     # returns back to main menu when ok-label is selected
     case $? in
-    0)
+    *)
         main
         ;;
     esac
