@@ -1,10 +1,13 @@
 #!/bin/bash
 
+# The main will display everything in the function utility selector
 main() {
-    utility_selector
+    utility_selector 
 }
 
 utility_selector() {
+    # A list dialog box with all utilities to be selected from will be displayed  and  is stored in variable selected_utility
+    # The radiolist enables us to use radio buttons for the first column
     selected_utility=$(
         zenity --list \
             --title="Utility Selector" \
@@ -16,9 +19,11 @@ utility_selector() {
             --cancel-label="Exit" \
             --ok-label="Open"
     )
-
+    
+    #$? command is used to know if exit(the 1 pattern) or open (the zero patern) has been selected
     case $? in
     0)
+        # when one of the utilities has been selected it will call their respective function and perform their task
         case $selected_utility in
         "Date/Time")
             date_time
@@ -29,9 +34,11 @@ utility_selector() {
         "Delete")
             delete_menu
             ;;
+        # The default operator is used to diplay a warning message using the warning dialog if ever open is clicked and no utilities has been selected yet
         *)
             zenity --warning \
                 --text="Please select an item to continue!"
+            # returns to main menu after ok is selected
             main
             ;;
         esac
