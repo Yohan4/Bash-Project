@@ -159,6 +159,7 @@ memory_info() {
 }
 
 hdd_info() {
+    # generate passowrd dialog for zenity  ans ask user's password
     PASSWORD=$(zenity --password --title="Authentication")
 
     case $? in
@@ -169,6 +170,7 @@ hdd_info() {
                 --text="Invalid Password!"
             hdd_info # run again
         else
+            #lshw extracts detailed information on the hardware configuration of the machine 
             DATA=$(
                 (echo -e $PASSWORD) | sudo -S lshw -class storage -class disk
             )
@@ -183,20 +185,22 @@ hdd_info() {
                 zenity --text-info \
                 --width=400 \
                 --height=600 \
+                # <<<stdin- allows zenity to read the content of the variable DATA from stdin
                 --title "Hard Drive" <<<$DATA
 
                 case $? in
-                *)
+                *)  #Default operator returns back to main menu
                     main
                     ;;
                 esac
             fi
         fi
         ;;
-    1)
+    1) 
+        # returns back to main menu 
         main
         ;;
-    *)
+    *)  # default operator returns an error message
         echo "An unexpected error has occurred."
         ;;
     esac
