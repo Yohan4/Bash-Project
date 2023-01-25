@@ -141,7 +141,7 @@ date_time() {
 calendar() {
 
     # Displays the calendar dialog box of zenity and store the date chosen in variable $Date
-    Date=$(
+    date=$(
         zenity --calendar \
             --title="Calendar/Reminder" \
             --text="Select a date to add a reminder" \
@@ -159,19 +159,19 @@ calendar() {
     fi
 
     #The file is assigned to variable NAME
-    NAME="$Date.txt"
+    NAME="$date.txt"
 
     # check if the file with that specific date exists
     if [ -f "$NAME" ]; then
 
         #if true reminder of that specific date is called and performs what is in the function reminder
-        reminder "$Date"
+        reminder "$date"
 
     else
         # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
         ADD_EVENT=$(zenity --entry \
                            --title="ADD AN EVENT" \
-                           --text="Add an event on $Date" \
+                           --text="Add an event on $date" \
                            --width="500" \
                            --height="400")
 
@@ -184,15 +184,15 @@ calendar() {
             zenity --warning \
                 --text="No reminder has been added!"
 
-            reminder $date # go back to reminder list
+            calendar # go back to calendar
         
         else 
         
             # user input is appended in a file with name as the actual date
-            # command automatically creates the file if it doesn't exist
+            # creates the file as it doesn't exist
             echo "$ADD_EVENT" >>"$NAME"
 
-            reminder $date # go back to reminder list
+            reminder $date # go back to calendar
         fi
     fi
 }
@@ -206,11 +206,12 @@ calendar() {
 #   Add even to a text file to the current directory
 #### FUNCTION END
 reminder() {
+
     date=$1 # set functions argument to a date variable
 
     # generate a dialog which displays reminder panel and current reminders
     zenity --text-info \
-        --title="$Date | Reminders" \
+        --title="$date | Reminders" \
         --width="500" \
         --height="400" \
         --ok-label="Add Reminder" \
@@ -219,13 +220,15 @@ reminder() {
 
     #check if cancel label has been selected
     if [ $? -eq 1 ]; then
+
         calendar # go back to calendar window
     else
+
         #displays a text entry dialog, where user can input a reminder, which is inturn stored in variable ADD_EVENT
         ADD_EVENT=$(
             zenity --entry \
                 --title="New Reminder" \
-                --text="Add a new reminder for: $Date" \
+                --text="Add a new reminder for: $date" \
                 --cancel-label="Go Back" \
                 --width="500" \
                 --height="400"
@@ -235,6 +238,7 @@ reminder() {
         # warn user if entry was blank
         # else add a reminder to file
         if [ "$ADD_EVENT" = "" ] ; then
+
             # generate a warning prompt to notify user about the error
             zenity --warning \
                 --text="No reminder has been added!"
@@ -257,6 +261,7 @@ reminder() {
 # 	Go back to main menu
 #### FUNCTION END
 delete_menu() {
+
     # generate an input box, to ask user for a directory name
     # the output of the user is stored in variable directory_input
     directory_input=$(
@@ -271,10 +276,13 @@ delete_menu() {
     # 1) user selected cancel, go back to main menu
     case $? in # CASE STATEMENT BEGIN
     0)
+
         # check if user has entered a value for directory_input
         # if user input is empty, provides current directory as path
         # else use the provided directory name from user input
         if [ "$directory_input" = "" ]; then # if statement to check condition wether user input is empty
+            
+            
             # call function file_selector and parse argument '$pwd' - current directory to the function
             # store returned values in file_to_delete
             # return file path or false for error
@@ -283,6 +291,7 @@ delete_menu() {
             # check if a file was returned to delete
             # else go back to main menu
             if [ "$file_to_delete" != false ]; then # if statement to check condition if their was an error thrown
+                
                 # call delete function and parse the complete file path, 
                 # including filename and suffix to delete as an argument
                 delete_file $file_to_delete
@@ -294,8 +303,10 @@ delete_menu() {
             # call function file_selector and parse argument '$HOME\/$directory_input' - home directory + user selected directory
             # store returned values in file_to_delete
             # return file path or false for error
-            file_to_delete=$(file_selector $HOME\/$directory_input)
+            file_to_delete=$(file_selector $HOME\/$directory_input\/)
+
             if [ "$file_to_delete" != false ]; then # if statement to check condition if their was an error thrown
+               
                 # call delete function and parse the complete file path, 
                 # including filename and suffix to delete as an argument
                 delete_file $file_to_delete
@@ -334,19 +345,24 @@ file_selector() {
     # -1) unexpected error thrown during execution
     case $? in # CASE STATEMENT BEGIN
     0)
+
         # return the full filepath, including filename and suffix
         echo "$FILE"
         ;;
+
     1)
         # return a boolean false, to throw an error
         echo false
         ;;
+
     -1)
         # generate a warning prompt to notify user about the error
         zenity --warning \
+
             --text="Unexpected error has occurred. Please try again!"
         # return a boolean false, to throw an error    
         echo false
+
         ;;
     esac # CASE STATEMENT END
 }
@@ -359,11 +375,14 @@ file_selector() {
 # 	Delete selected file, go back to delete_menu
 #### FUNCTION END
 delete_file() {
+
     full_path=$1 # set functions argument to a full_path variable
+    
     # get the currently directory, from which the program was launched and sets it to initial_directory variable
     initial_directory=$pwd 
     # strips the location path to the file from the full_path and set it to variable file_location
     file_location="${full_path%/*}/" # '%/*' takes all values before last character '/'
+    
     # strips the file_name with suffix from the full_path and set it to variable file_name
     file_name=$(basename ${full_path}) # 'basename' returns filename with suffix
 
