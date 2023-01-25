@@ -40,6 +40,7 @@ main() {
 
 # starts utility menu procedure and opens a dialog with list of menu-items
 utility_selector() {
+
     # A list dialog box with all utilities to be selected from will be displayed and is stored in variable selected_utility
     # The radiolist enables us to use radio buttons for the first column
     selected_utility=$(
