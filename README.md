@@ -78,7 +78,7 @@ calendar() {
     Date=$(
         zenity --calendar \
             --title="Calendar/Reminder" \
-            --text="select a date to add an event" \
+            --text="Select a date to add a reminder" \
             --date-format='%d.%m.%Y' \
             --cancel-label "Go Back" \
             --ok-label "Open Reminder" \
@@ -88,7 +88,7 @@ calendar() {
 
     #$? = was last command succesfull . Answer is 0 means 'yes ok-label has been selected'. Non-zero values means 'No cancel-label has been selected'
     if [ $? -eq 1 ]; then
-        # returns back to main menu when cance
+        # returns back to main menu when cancel
         main
     fi
     #The file is assigned to variable NAME
@@ -99,7 +99,11 @@ calendar() {
         reminder "$Date"
     else
         # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
-        ADD_EVENT=$(zenity --entry --title="ADD AN EVENT" --text="Add an event on $Date" --width=500 --height=300)
+        ADD_EVENT=$(zenity --entry \
+                           --title="ADD AN EVENT" \
+                           --text="Add an event on $Date" \
+                           --width=500 \
+                           --height=300)
         #The user input is stored in the file NAME="Date.txt" which is a specific date
         echo "$ADD_EVENT" >>"$NAME"
         reminder "$Date"
@@ -133,9 +137,19 @@ reminder() {
     else
         #displays a text entry dialog  and user input is saved in variable ADD_EVENT
         ADD_EVENT=$(zenity --entry --title="NEW EVENT" --text="Add a new event on $Date" --cancel-label="Go Back" --width=500 --height=300)
-        #user input is appended in a file
-        echo "$ADD_EVENT" >>"$1.txt"
-        reminder $date # go back to reminder list
+        
+        if [ "$ADD_EVENT" = "" ] ; then
+            # generate a warning prompt to notify user about the error
+            zenity --warning \
+                --text="Please enter a reminder!"
+
+            reminder $date # go back to reminder list
+        
+        else 
+            #user input is appended in a file
+            echo "$ADD_EVENT" >>"$date.txt"
+            reminder $date # go back to reminder list
+        fi
     fi
 }
 
