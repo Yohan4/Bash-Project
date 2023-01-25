@@ -336,9 +336,9 @@ delete_file() {
     # get the currently directory, from which the program was launched and sets it to initial_directory variable
     initial_directory=$pwd 
     # strips the location path to the file from the full_path and set it to variable file_location
-    file_location="${full_path%/*}/"
+    file_location="${full_path%/*}/" # '%/*' takes all values before last character '/'
     # strips the file_name with suffix from the full_path and set it to variable file_name
-    file_name=$(basename ${full_path})
+    file_name=$(basename ${full_path}) # 'basename' returns filename with suffix
 
     # prompt user a warning dialog and accepts a confirmation, boolean value yes or no
     zenity --question \
