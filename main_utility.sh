@@ -149,7 +149,7 @@ calendar() {
             --cancel-label="Go Back" \
             --ok-label="Open Reminder" \
             --width="500" \
-            --height="300" 
+            --height="300"
     )
 
     #$? = was last command succesfull . Answer is 0 means 'yes ok-label has been selected'. Non-zero values means 'No cancel-label has been selected'
@@ -203,7 +203,7 @@ calendar() {
 # 	Date
 # OUTPUT: 
 # 	Go back to calendar
-#   Add even to a text file to the current directory
+#   Add event to a text file to the current directory
 #### FUNCTION END
 reminder() {
 
@@ -399,7 +399,7 @@ delete_file() {
         # change current directory to the file location directory
         cd $file_location
         # delete the file using 'rm' command followed by the filename with suffix
-        if rm $file_name ; then
+        if rm $file_name ; then # results is cross-check for errors
             cd $initial_directory
             main # go back to main
         else
