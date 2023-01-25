@@ -77,6 +77,8 @@ utility_selector() {
         "Delete")
             delete_menu # call delete file function
             ;;
+
+   
         # "More Utilities")
         #     ./sub_utility.sh
         #     ;;
@@ -85,6 +87,7 @@ utility_selector() {
             # generate a warning to prompt user to select an item
             zenity --warning \
                 --text="Please select an item to continue!"
+
             # returns to main menu after ok is selected
             main # restart through main function
             ;;
@@ -94,6 +97,7 @@ utility_selector() {
         # exit and terminate process id Exit button is pressed
         exit
         ;;
+
     esac # CASE STATEMENT END
 }
 
@@ -104,11 +108,13 @@ date_time() {
     (
         # keeps updating Date and Time until the the process is terminated
         while true; do
+
             # output time and date to feed to progress dialog
             echo "# Time: $(date "+%T")  |  DATE: $(date "+%d-%B-%Y")"
             # percentage set to progress dialog, to allow termination of process
             echo "100"
         done
+
     ) | # '|' pipe allows transfer of stdout to zenity dialog as destination
         # generates a progress dialog with time and date feeded from above
         zenity --progress \
@@ -133,6 +139,7 @@ date_time() {
 # starts the calendar procedure and display calendar menu
 #### FUNCTION END
 calendar() {
+
     # Displays the calendar dialog box of zenity and store the date chosen in variable $Date
     Date=$(
         zenity --calendar \
@@ -150,12 +157,16 @@ calendar() {
         # returns back to main menu when cancel
         main
     fi
+
     #The file is assigned to variable NAME
     NAME="$Date.txt"
+
     # check if the file with that specific date exists
     if [ -f "$NAME" ]; then
+
         #if true reminder of that specific date is called and performs what is in the function reminder
         reminder "$Date"
+
     else
         # if false it displays an entry box and    the user input is stored in variable ADD_EVENT
         ADD_EVENT=$(zenity --entry \
@@ -163,11 +174,27 @@ calendar() {
                            --text="Add an event on $Date" \
                            --width="500" \
                            --height="400")
-        #The user input is stored in the file NAME="Date.txt" which is a specific date
-        echo "$ADD_EVENT" >>"$NAME"
-        reminder "$Date"
-    fi
 
+        # checks if the returned value is empty and user haven't input a reminder
+        # warn user if entry was blank
+        # else add a reminder to file
+        if [ "$ADD_EVENT" = "" ] ; then
+
+            # generate a warning prompt to notify user about the error
+            zenity --warning \
+                --text="No reminder has been added!"
+
+            reminder $date # go back to reminder list
+        
+        else 
+        
+            # user input is appended in a file with name as the actual date
+            # command automatically creates the file if it doesn't exist
+            echo "$ADD_EVENT" >>"$NAME"
+
+            reminder $date # go back to reminder list
+        fi
+    fi
 }
 
 #### FUNCTION BEGIN
@@ -201,7 +228,7 @@ reminder() {
                 --text="Add a new reminder for: $Date" \
                 --cancel-label="Go Back" \
                 --width="500" \
-                --height="300"
+                --height="400"
         )
 
         # checks if the returned value is empty and user haven't input a reminder
@@ -299,7 +326,7 @@ file_selector() {
     # generate a file selector dialog
     # --filename="$directory", parse the provided directory path to open as default location
     # FILE, save the file path if sucess and selected
-    FILE=$(zenity --file-selection --filename="$directory/" --title="Select a File")
+    FILE=$(zenity --file-selection --filename="$directory" --title="Select a File")
 
     # case statement to check for stout, '$?' is the output from interface
     # 0) a file has been succesfully selected
@@ -353,9 +380,17 @@ delete_file() {
         # change current directory to the file location directory
         cd $file_location
         # delete the file using 'rm' command followed by the filename with suffix
-        rm $file_name
+        if rm $file_name ; then
+            cd $initial_directory
+            main # go back to main
+        else
+            # generate a warning prompt to notify user about the error
+            zenity --warning \
+                --text="Unexpected error has occurred."
+            cd $initial_directory
+            main # go back to main
+        fi
         # get back to the initial directory from which the program was initially launched
-        cd $initial_directory
         ;;
     1)
         # if user input is No, go back to delete_menu
