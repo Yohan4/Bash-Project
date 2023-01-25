@@ -40,7 +40,6 @@ main() {
 
 # starts utility menu procedure and opens a dialog with list of menu-items
 utility_selector() {
-
     # A list dialog box with all utilities to be selected from will be displayed and is stored in variable selected_utility
     # The radiolist enables us to use radio buttons for the first column
     selected_utility=$(
@@ -97,6 +96,9 @@ utility_selector() {
     esac # CASE STATEMENT END
 }
 
+#### FUNCTION BEGIN
+# executes the os type function and output os informations on a dialog info box
+#### FUNCTION END
 os_type() { 
     # The command cat /etc/os-release which enables us to check the operating system is stored in  variable os_information
     os_information=$(cat /etc/os-release)  
@@ -115,6 +117,9 @@ os_type() {
     esac
 }
 
+#### FUNCTION BEGIN
+# executes cpu information function and display cpu information on a dialog info box
+#### FUNCTION END
 cpu_information() {
     #The command lscpu which displays the cpu details is stored in variable cpu_specification
     cpu_specification=$(lscpu)
@@ -134,6 +139,9 @@ cpu_information() {
     esac
 }
 
+#### FUNCTION BEGIN
+# executes memory info function and display memory information on a dialog info box
+#### FUNCTION END
 memory_info() {
     #The command cat /proc/meminfo reports the amount of available and used memory and is stored in variable memory_data
     memory_data=$(cat /proc/meminfo)
@@ -154,6 +162,9 @@ memory_info() {
     esac
 }
 
+#### FUNCTION BEGIN
+# executes hdd info function, requires password to get information and display hdd information on a dialog info box
+#### FUNCTION END
 hdd_info() {
     # generate passowrd dialog for zenity  ans ask user's password
     PASSWORD=$(zenity --password --title="Authentication")
@@ -201,6 +212,9 @@ hdd_info() {
     esac
 }
 
+#### FUNCTION BEGIN
+# executes file system type function and display mounted file systems on a dialog info box
+#### FUNCTION END
 file_system_type() {
     # The mount statement provide all the mounted devices along with the filesystem format and mounted location in Linux.
     # To get the mounted filesystems type,
@@ -213,7 +227,7 @@ file_system_type() {
     zenity --text-info \
         --title="Mounted File System" \
         --width="400" \
-        --height="600" \
+        --height="300" \
         --ok-label="Go Back" <<<$mount_list
     
     case $? in
